@@ -1,4 +1,6 @@
 import { logo } from "../assets";
+import { CirclesWithBar } from "react-loader-spinner";
+
 const Hero = () => {
   return (
     <header className="w-full flex justify-center items-center flex-col">
@@ -10,7 +12,9 @@ const Hero = () => {
         />
         <button
           type="button"
-          onClick={() => window.open("hello")}
+          onClick={() =>
+            window.open("https://github.com/ranselorm/ai_summarizer.git")
+          }
           className="black_btn"
         >
           GitHub
@@ -25,6 +29,21 @@ const Hero = () => {
         Simplify your reading with Summize, an open-source article summarizer
         that transforms lengthy articles into clear and concise summaries
       </h2>
+
+      <div className="mt-20">
+        <CirclesWithBar
+          height="100"
+          width="100"
+          color="#4fa94d"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          outerCircleColor=""
+          innerCircleColor=""
+          barColor=""
+          ariaLabel="circles-with-bar-loading"
+        />
+      </div>
     </header>
   );
 };
