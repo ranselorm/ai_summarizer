@@ -30,7 +30,7 @@ const Hero = () => {
         that transforms lengthy articles into clear and concise summaries
       </h2>
 
-      <div className="mt-20">
+      {/* <div className="mt-20">
         <CirclesWithBar
           height="100"
           width="100"
@@ -43,7 +43,7 @@ const Hero = () => {
           barColor=""
           ariaLabel="circles-with-bar-loading"
         />
-      </div>
+      </div> */}
     </header>
   );
 };
