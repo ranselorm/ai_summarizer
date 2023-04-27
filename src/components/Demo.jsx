@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { copy, linkIcon, tick, loader } from "../assets";
-import { AiOutlineEnter } from "react-icons/ai";
+import { AiOutlineEnter, AiOutlineDelete } from "react-icons/ai";
 import axios from "axios";
 import { CirclesWithBar } from "react-loader-spinner";
 
@@ -46,14 +46,21 @@ const Demo = () => {
       const response = await axios.request(options);
       if (response?.data.summary) {
         const newArticle = { url: article.url, summary: response.data.summary };
-        const updatedAllArticles = [newArticle, ...articles];
+        // const updatedAllArticles = [newArticle, ...articles];
+        const foundItem = articles.find(
+          (article) => article.url === newArticle.url
+        );
+        let updatedAllArticles;
+        if (!foundItem) {
+          updatedAllArticles = [...newArticle, articles];
+        } else {
+          updatedAllArticles = [...articles];
+        }
         setArticle(newArticle);
         setArticles(updatedAllArticles);
         setIsLoading(false);
         localStorage.setItem("articles", JSON.stringify(updatedAllArticles));
       }
-      console.log(article);
-      console.log(articles);
     } catch (error) {
       setError(error);
       setIsLoading(false);
@@ -63,9 +70,12 @@ const Demo = () => {
   const handleCopy = (copyUrl) => {
     setCopied(copyUrl);
     navigator.clipboard.writeText(copyUrl);
-
     setTimeout(() => setCopied(false), 3000);
   };
+
+  // const deleteItem = (url) => {
+  //   return articles.filter((article) => article.url !== url);
+  // };
 
   return (
     <section className="mt-16 w-full max-w-xl">
@@ -101,11 +111,12 @@ const Demo = () => {
               onClick={() => setArticle(item)}
               className="link_card"
             >
-              <div className="copy_btn" onClick={() => handleCopy(item.url)}>
+              <div className="copy_btn">
                 <img
                   src={copied === item.url ? tick : copy}
                   alt="copy"
                   className="w-[40%] h-[40%] object-contain"
+                  onClick={() => handleCopy(item.url)}
                 />
               </div>
               <p className="flex-1 font-satoshi text-sm truncated font-medium text-blue-700">
@@ -114,6 +125,16 @@ const Demo = () => {
             </div>
           ))}
         </div>
+
+        {/* {articles && (
+          <span
+            className="cursor-pointer text-[16px] flex items-center gap-2"
+            onClick={() => localStorage.removeItem("articles")}
+          >
+            <AiOutlineDelete />
+            Clear History
+          </span>
+        )} */}
       </div>
       {/* Display results */}
       <div className="flex justify-center items-center my-10 max-w-full">
@@ -122,6 +143,7 @@ const Demo = () => {
         ) : error ? (
           <p className="font-inter font-bold text-black text-center">
             Well, that wasn't supposed to happen...
+            <span>Please check your internet connection and try again!</span>
           </p>
         ) : (
           article.summary && (
